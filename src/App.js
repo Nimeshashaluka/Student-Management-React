@@ -10,6 +10,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
+        
         <Route path="/subDashboard" element={<SubAdDashboard />} />
         <Route path="/superDashboard" element={<SuperAdDashboard />} />
         <Route path="/studentDashboard" element={<StudentDashboard />} />
