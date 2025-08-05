@@ -15,19 +15,30 @@ export default function Login() {
         email: email,
         password: password,
       })
+
       .then((res) => {
         if (res.data.message === "Login Success") {
           const user = res.data.user;
 
-          // 🔁 Navigate based on admin_type_id
-          if (user.admin_type_id === 1) {
-            navigate("/superDashboard");
-          } else if (user.admin_type_id === 2) {
-            navigate("/subDashboard");
-          } else if (user.admin_type_id === 3) {
-            navigate("/studentDashboard");
+          if (user.status_id !== 1) {
+            setMessage(
+              "Your account is not active. Please contact the administrator."
+            );
           } else {
-            setMessage("Unknown admin type");
+            // ✅ Save user ID and role to localStorage
+            localStorage.setItem("userId", user.id);
+            localStorage.setItem("userType", user.user_type_id);
+
+            // Navigate based on user_type_id
+            if (user.user_type_id === 1) {
+              navigate("/superDashboard");
+            } else if (user.user_type_id === 2) {
+              navigate("/subDashboard");
+            } else if (user.user_type_id === 3) {
+              navigate("/studentDashboard");
+            } else {
+              setMessage("Unknown user type");
+            }
           }
         } else {
           setMessage(res.data.message);
@@ -36,7 +47,8 @@ export default function Login() {
       .catch((err) => {
         setMessage("Server error occurred");
       });
-    console.log("Login attempt:", { email, password });
+    // console.log("Login attempt:", { email, password });
+    console.log("Login attempt:", "email :" + email, "password :" + password);
   };
 
   return (
